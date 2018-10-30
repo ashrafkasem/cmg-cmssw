@@ -40,7 +40,7 @@ scriptName=${1:-./batchScript.sh}
 cat > $jobdesc <<EOF
 Universe = vanilla
 Executable = ${prefix}${scriptName}
-use_x509userproxy = \$ENV(X509_USER_PROXY)
+#use_x509userproxy = \$ENV(X509_USER_PROXY)
 Log        = ${prefix}condor_job_\$(ProcId).log
 Output     = ${prefix}condor_job_\$(ProcId).out
 Error      = ${prefix}condor_job_\$(ProcId).error
@@ -59,4 +59,4 @@ else
 fi;
 
 # Submit job
-/usr/bin/condor_submit $jobdesc
+/usr/bin/condor_submit -name s02 $jobdesc

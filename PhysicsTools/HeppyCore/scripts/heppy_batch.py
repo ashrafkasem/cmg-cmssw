@@ -12,6 +12,26 @@ from PhysicsTools.HeppyCore.utils.batchmanager import BatchManager
 
 from PhysicsTools.HeppyCore.framework.heppy_loop import split
 
+def batchScriptNAF(jobDir):
+   '''prepare a NAF version of the batch script'''
+
+
+   cmssw_release = os.environ['CMSSW_BASE']
+   script = """#!/bin/bash
+export X509_USER_PROXY=/nfs/dust/cms/user/$USER/k5-ca-proxy.pem
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+cd {jobdir}
+cd {cmssw}/src
+eval `scramv1 ru -sh`
+cd -
+echo 'running'
+python {cmssw}/src/PhysicsTools/HeppyCore/python/framework/looper.py pycfg.py config.pck --options=options.json
+echo
+echo 'sending the job directory back'
+mv Loop/* ./ && rm -r Loop
+""".format(jobdir = jobDir,cmssw = cmssw_release)
+   return script
+   
 def batchScriptPADOVA( index, jobDir='./'):
    '''prepare the LSF version of the batch script, to run on LSF'''
    script = """#!/bin/bash
@@ -342,6 +362,8 @@ class MyBatchManager( BatchManager ):
            scriptFile.write( batchScriptCERN( mode, jobDir, storeDir ) )
        elif mode == 'PSI':
            scriptFile.write( batchScriptPSI ( value, jobDir, storeDir ) ) # storeDir not implemented at the moment
+       elif mode == 'NAF':
+           scriptFile.write( batchScriptNAF(jobDir) )
        elif mode == 'LOCAL':
            scriptFile.write( batchScriptLocal( storeDir, value) )  # watch out arguments are swapped (although not used)
        elif mode == 'PISA' :
@@ -401,4 +423,9 @@ if __name__ == '__main__':
     batchManager.PrepareJobs( listOfValues, listOfNames )
     waitingTime = 0.1
     batchManager.SubmitJobs( waitingTime )
-
+    #if '-t' not in options.batch:
+    #    waitingTime = 0.1
+    #    batchManager.SubmitJobs( waitingTime )
+    #else:
+    #    print 'Submitting job array'
+    #    batchManager.SubmitJobArray(len(listOfNames))
