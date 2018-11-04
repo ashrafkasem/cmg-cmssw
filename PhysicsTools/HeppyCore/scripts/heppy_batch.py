@@ -25,10 +25,45 @@ cd {cmssw}/src
 eval `scramv1 ru -sh`
 cd -
 echo 'running'
-python {cmssw}/src/PhysicsTools/HeppyCore/python/framework/looper.py pycfg.py config.pck --options=options.json
-echo
-echo 'sending the job directory back'
-mv Loop/* ./ && rm -r Loop
+
+# to monitor the jobs 
+
+if [ -f processing ]; then
+    echo "Already processing that chunk now"
+    exit 0
+fi
+if [ -f processed ]; then
+    echo "Already processed that chunk"
+    exit 0
+fi
+if [ -f failed ]; then
+    echo "Going to reprocess this chunk"
+    rm failed
+    # do clean up magic (TODO)
+fi
+touch processing
+
+python {cmssw}/src/PhysicsTools/HeppyCore/python/framework/looper.py pycfg.py config.pck --options=options.json  > looper.log
+
+echo "Looper finished!"
+echo "Checking output..."
+if grep -r "number of events processed" looper.log; then
+   echo
+   echo 'sending the job directory back'
+   echo "Job succeeded"
+   touch processed
+   mv Loop/* ./
+   rm -r Loop/
+else
+   echo "Couldn't find processed events!"
+   echo "Job failed!"
+   mv looper.log Loop/
+   mv Loop Loop_failed_`date +%s`
+   touch failed
+fi
+
+rm processing
+
 """.format(jobdir = jobDir,cmssw = cmssw_release)
    return script
    
