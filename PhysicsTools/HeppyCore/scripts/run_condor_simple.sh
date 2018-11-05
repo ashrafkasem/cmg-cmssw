@@ -51,6 +51,7 @@ EOF
 
 [[ "${flavour}" != "" ]] && echo "+JobFlavour = \"${flavour}\"" >> $jobdesc
 [[ "${maxruntime}" != "" ]] && echo "+MaxRuntime = ${maxruntime}" >> $jobdesc
+[[ "${maxruntime}" != "" ]] && echo "+RequestRuntime = ${maxruntime}" >> $jobdesc
 
 if [[ "$bulk" != "" ]]; then
     echo "queue Chunk matching dirs ${bulk}_Chunk*" >> $jobdesc

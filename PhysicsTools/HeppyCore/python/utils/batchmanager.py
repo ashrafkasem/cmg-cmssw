@@ -194,7 +194,7 @@ class BatchManager:
         print 'SUBMITTING JOBS ======== '
         root = os.getcwd()
         if self.options_.bulk:
-            if self.mode == "LXPLUS-CONDOR-SIMPLE": 
+            if (self.mode == "LXPLUS-CONDOR-SIMPLE" or self.mode == "NAF") : 
                 bulkcmd = self.options_.batch.replace("run_condor_simple.sh","run_condor_simple.sh --bulk %s ")
             else:
                 raise RuntimeError("Bulk submission currently implemented only for run_condor_simple.sh")
