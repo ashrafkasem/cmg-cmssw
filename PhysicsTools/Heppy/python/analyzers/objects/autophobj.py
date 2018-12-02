@@ -257,10 +257,51 @@ genParticleWithMotherId = NTupleObjectType("genParticleWithMotherId", baseObject
     NTupleVariable("grandmotherId", lambda x : x.mother(0).mother(0).pdgId() if x.mother(0) and x.mother(0).mother(0) else 0, int, help="pdgId of the grandmother of the particle")
 ])
 genParticleWithAncestryType = NTupleObjectType("genParticleWithAncestry", baseObjectTypes = [ genParticleType ], mcOnly=True, variables = [
-    NTupleVariable("motherId", lambda x : x.motherId, int, help="pdgId of the mother of the particle"),
-    NTupleVariable("grandmotherId", lambda x : x.grandmotherId, int, help="pdgId of the grandmother of the particle"),
-    NTupleVariable("sourceId", lambda x : x.sourceId, int, help="origin of the particle (heaviest ancestor): 6=t, 25=h, 23/24=W/Z"),
+    #NTupleVariable("motherId", lambda x : x.motherId, int, help="pdgId of the mother of the particle"),
+    #NTupleVariable("grandmotherId", lambda x : x.grandmotherId, int, help="pdgId of the grandmother of the particle"),
+    #NTupleVariable("sourceId", lambda x : x.sourceId, int, help="origin of the particle (heaviest ancestor): 6=t, 25=h, 23/24=W/Z"),
+    NTupleVariable("motherId", lambda x : x.mother(0).pdgId() if x.mother(0) else 0, int, help="pdgId of the mother of the particle"),
+    NTupleVariable("grandmotherId", lambda x : x.mother(0).mother(0).pdgId() if x.mother(0) and x.mother(0).mother(0) else 0, int, help="pdgId of the grandmother of the particle"),
+    #NTupleVariable("sourceId", lambda x : x.sourceId, int, help="origin of the particle (heaviest ancestor): 6=t, 25=h, 23/24=W/Z"),
+################################################## Add Gen Info ############################################################
+    NTupleVariable("daughterId", lambda x : x.daughter(0).pdgId() if x.daughter(0) else 0, int, help="pdgId of the daughter of the particle"),
+    NTupleVariable("daughter2Id", lambda x : x.daughter(1).pdgId() if x.daughter(1) else 0, int, help="pdgId of the second daughter of the particle"),
+
+    NTupleVariable("grandDaughterId", lambda x : x.daughter(0).daughter(0).pdgId() if x.daughter(0) and x.daughter(0).daughter(0) else 0, int, help="pdgId of the grandDaughter of the particle"),
+    NTupleVariable("grandDaughter2Id", lambda x : x.daughter(0).daughter(1).pdgId() if x.daughter(0) and x.daughter(0).daughter(1) else 0, int, help="pdgId of the second grandDaughter of the particle"),
+    NTupleVariable("grandDaughter2_1Id", lambda x : x.daughter(1).daughter(0).pdgId() if x.daughter(1) and x.daughter(1).daughter(0) else 0, int, help="pdgId of the grandDaughter (2nd daughter)  of the particle"),
+    NTupleVariable("grandDaughter2_2Id", lambda x : x.daughter(1).daughter(1).pdgId() if x.daughter(1) and x.daughter(1).daughter(1) else 0, int, help="pdgId of the second grandDaughter (2nd daughter) of the particle"),
+
+
+    NTupleVariable("GGDaughterId", lambda x : x.daughter(0).daughter(0).daughter(0).pdgId() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(0)  else 0, int, help="pdgId of the GGDaughter of the particle"),
+    NTupleVariable("GGDaughter2Id", lambda x : x.daughter(0).daughter(0).daughter(1).pdgId() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(1)  else 0, int, help="pdgId of the second GGDaughter of the particle"),
+    NTupleVariable("GGDaughter2_1_1Id", lambda x : x.daughter(1).daughter(0).daughter(0).pdgId() if x.daughter(1) and x.daughter(1).daughter(0) and x.daughter(1).daughter(0).daughter(0)  else 0, int, help="pdgId of the GGDaughter (2nd D,1st GD)  of the particle"),
+    NTupleVariable("GGDaughter2_1_2Id", lambda x : x.daughter(1).daughter(0).daughter(1).pdgId() if x.daughter(1) and x.daughter(1).daughter(0) and x.daughter(1).daughter(0).daughter(1)  else 0, int, help="pdgId of the second GGDaughter (2nd D,1st GD)  of the particle"),
+    NTupleVariable("GGDaughter2_2_1Id", lambda x : x.daughter(1).daughter(1).daughter(0).pdgId() if x.daughter(1) and x.daughter(1).daughter(1) and x.daughter(1).daughter(1).daughter(0)  else 0, int, help="pdgId of the GGDaughter (2nd D,1st GD)  of the particle"),
+    NTupleVariable("GGDaughter2_2_2Id", lambda x : x.daughter(1).daughter(1).daughter(1).pdgId() if x.daughter(1) and x.daughter(1).daughter(1) and x.daughter(1).daughter(1).daughter(1)  else 0, int, help="pdgId of the second GGDaughter (2nd D,1st GD)  of the particle"),
+
+
+    NTupleVariable("daughter_pT", lambda x : x.daughter(0).pt() if x.daughter(0) else 0, float, help="pT of the daughter of the particle"),
+    NTupleVariable("daughter2_pT", lambda x : x.daughter(1).pt() if x.daughter(1) else 0, float, help="pT of the second daughter of the particle"),
+    NTupleVariable("daughter_eta", lambda x : x.daughter(0).eta() if x.daughter(0) else 0, float, help="eta of the daughter of the particle"),
+    NTupleVariable("daughter2_eta", lambda x : x.daughter(1).eta() if x.daughter(1) else 0, float, help="eta of the second daughter of the particle"),
+    NTupleVariable("daughter_phi", lambda x : x.daughter(0).phi() if x.daughter(0) else 0, float, help="phi of the daughter of the particle"),
+    NTupleVariable("daughter2_phi", lambda x : x.daughter(1).phi() if x.daughter(1) else 0, float, help="phi of the second daughter of the particle"),
+    NTupleVariable("grandDaughter_pT", lambda x : x.daughter(0).daughter(0).pt() if x.daughter(0) and x.daughter(0).daughter(0) else 0, float, help="pT of the grandDaughter of the particle"),
+    NTupleVariable("grandDaughter2_pT", lambda x : x.daughter(0).daughter(1).pt() if x.daughter(0) and x.daughter(0).daughter(1) else 0, float, help="pT of the second grandDaughter of the particle"),
+    NTupleVariable("grandDaughter_eta", lambda x : x.daughter(0).daughter(0).eta() if x.daughter(0) and x.daughter(0).daughter(0) else 0, float, help="eta of the grandDaughter of the particle"),
+    NTupleVariable("grandDaughter2_eta", lambda x : x.daughter(0).daughter(1).eta() if x.daughter(0) and x.daughter(0).daughter(1) else 0, float, help="eta of the second grandDaughter of the particle"),
+    NTupleVariable("grandDaughter_phi", lambda x : x.daughter(0).daughter(0).phi() if x.daughter(0) and x.daughter(0).daughter(0) else 0, float, help="phi of the grandDaughter of the particle"),
+    NTupleVariable("grandDaughter2_phi", lambda x : x.daughter(0).daughter(1).phi() if x.daughter(0) and x.daughter(0).daughter(1) else 0, float, help="phi of the second grandDaughter of the particle"),
+    NTupleVariable("GGDaughter_pT", lambda x : x.daughter(0).daughter(0).daughter(0).pt() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(0)  else 0, float, help="pT of the GGDaughter of the particle"),
+    NTupleVariable("GGDaughter2_pT", lambda x : x.daughter(0).daughter(0).daughter(1).pt() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(1)  else 0, float, help="pT of the second GGDaughter of the particle"),
+    NTupleVariable("GGDaughter_eta", lambda x : x.daughter(0).daughter(0).daughter(0).eta() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(0)  else 0, float, help="eta of the GGDaughter of the particle"),
+    NTupleVariable("GGDaughter2_eta", lambda x : x.daughter(0).daughter(0).daughter(1).eta() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(1)  else 0, float, help="eta of the second GGDaughter of the particle"),
+    NTupleVariable("GGDaughter_phi", lambda x : x.daughter(0).daughter(0).daughter(0).phi() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(0)  else 0, float, help="phi of the GGDaughter of the particle"),
+    NTupleVariable("GGDaughter2_phi", lambda x : x.daughter(0).daughter(0).daughter(1).phi() if x.daughter(0) and x.daughter(0).daughter(0) and x.daughter(0).daughter(0).daughter(1)  else 0, float, help="phi of the second GGDaughter of the particle"),
+########################################################################################################################
+
 ])
-genParticleWithLinksType = NTupleObjectType("genParticleWithLinks", baseObjectTypes = [ genParticleWithAncestryType ], mcOnly=True, variables = [
+genParticleWithLinksType = NTupleObjectType("genParticleWithLinks", baseObjectTypes = [ genParticleWithMotherId ], mcOnly=True, variables = [
     NTupleVariable("motherIndex", lambda x : x.motherIndex, int, help="index of the mother in the generatorSummary")
 ])
