@@ -54,6 +54,7 @@ if grep -r "number of events processed" looper.log; then
    touch processed
    mv Loop/* ./
    rm -r Loop/
+   rm -rf cmsswPreProcessing.root
 else
    echo "Couldn't find processed events!"
    echo "Job failed!"
