@@ -60,4 +60,4 @@ else
 fi;
 
 # Submit job
-/usr/bin/condor_submit -name s02 $jobdesc
+/usr/bin/condor_submit $jobdesc
