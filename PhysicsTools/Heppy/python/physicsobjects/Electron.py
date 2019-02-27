@@ -75,7 +75,7 @@ class Electron( Lepton ):
             hOverE_Cr = 0.0368 if self.physObj.isEB() else 0.201
 
         vars = {
-            'dEtaIn' : abs(self.dEtaInSeed()) if (("POG_SPRING16_25ns_v1" in wp) or ("POG_FALL17_94X_v1" in wp)) else abs(self.physObj.deltaEtaSuperClusterTrackAtVtx()),
+            'dEtaIn' : abs(self.dEtaInSeed()) if (("POG_SPRING16_25ns_v1" in wp) or ("POG_FALL17_94X_v1" in wp) or ("POG_FALL17_94X_v2" in wp)) else abs(self.physObj.deltaEtaSuperClusterTrackAtVtx()),
             'dPhiIn' : abs(self.physObj.deltaPhiSuperClusterTrackAtVtx()),
             'sigmaIEtaIEta' : self.physObj.full5x5_sigmaIetaIeta() if showerShapes == "full5x5" else self.physObj.sigmaIetaIeta(),
             'H/E' : self.physObj.hadronicOverEm() - (hOverE_CE  + hOverE_Cr * self.rho)/(self.physObj.superCluster().energy()),
@@ -137,6 +137,11 @@ class Electron( Lepton ):
             'POG_FALL17_94X_v1_Loose'     :  [('dEtaIn', [0.00387, 0.00720]), ('dPhiIn', [0.0716, 0.1470]), ('sigmaIEtaIEta', [0.0105, 0.0356]), ('H/E', [0.050, 0.0414]), ('1/E-1/p', [0.1290, 0.0875])],
             'POG_FALL17_94X_v1_Medium'    :  [('dEtaIn', [0.00365, 0.00625]), ('dPhiIn', [0.0588, 0.0355]), ('sigmaIEtaIEta', [0.0105, 0.0309]), ('H/E', [0.026, 0.0260]), ('1/E-1/p', [0.0327, 0.0335])],
             'POG_FALL17_94X_v1_Tight'     :  [('dEtaIn', [0.00353, 0.00567]), ('dPhiIn', [0.0499, 0.0165]), ('sigmaIEtaIEta', [0.0104, 0.0305]), ('H/E', [0.026, 0.0260]), ('1/E-1/p', [0.0278, 0.0158])],
+             ## ------- https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Offline_selection_criteria_for_V
+            'POG_FALL17_94X_v2_Veto'      :  [('dEtaIn', [0.00463, 0.00814]), ('dPhiIn', [0.1480, 0.1900]), ('sigmaIEtaIEta', [0.0126, 0.0457]), ('H/E', [0.050, 0.0500]), ('1/E-1/p', [0.2090, 0.1320])],
+            'POG_FALL17_94X_v2_Loose'     :  [('dEtaIn', [0.00377, 0.00674]), ('dPhiIn', [0.0884, 0.1690]), ('sigmaIEtaIEta', [0.0112, 0.0425]), ('H/E', [0.050, 0.0441]), ('1/E-1/p', [0.1930, 0.1110])],
+            'POG_FALL17_94X_v2_Medium'    :  [('dEtaIn', [0.00320, 0.00632]), ('dPhiIn', [0.0547, 0.0394]), ('sigmaIEtaIEta', [0.0106, 0.0387]), ('H/E', [0.046, 0.0275]), ('1/E-1/p', [0.1840, 0.0721])],
+            'POG_FALL17_94X_v2_Tight'     :  [('dEtaIn', [0.00255, 0.00501]), ('dPhiIn', [0.0220, 0.0236]), ('sigmaIEtaIEta', [0.0104, 0.0353]), ('H/E', [0.026, 0.0188]), ('1/E-1/p', [0.1590, 0.0197])],
         }
         WP_conversion_veto = {
             # missing Hits incremented by 1 because we return False if >=, note the '='
@@ -178,6 +183,11 @@ class Electron( Lepton ):
             'POG_FALL17_94X_v1_ConvVeto_Loose'  :  WP['POG_FALL17_94X_v1_Loose' ]+[('conversionVeto', [True, True]), ('missingHits', [2, 2])],
             'POG_FALL17_94X_v1_ConvVeto_Medium' :  WP['POG_FALL17_94X_v1_Medium']+[('conversionVeto', [True, True]), ('missingHits', [2, 2])],
             'POG_FALL17_94X_v1_ConvVeto_Tight'  :  WP['POG_FALL17_94X_v1_Tight' ]+[('conversionVeto', [True, True]), ('missingHits', [2, 2])],
+            ##-------- https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Offline_selection_criteria_for_V
+            'POG_FALL17_94X_v2_ConvVeto_Veto'   :  WP['POG_FALL17_94X_v2_Veto'  ]+[('conversionVeto', [True, True]), ('missingHits', [2, 3])],
+            'POG_FALL17_94X_v2_ConvVeto_Loose'  :  WP['POG_FALL17_94X_v2_Loose' ]+[('conversionVeto', [True, True]), ('missingHits', [1, 1])],
+            'POG_FALL17_94X_v2_ConvVeto_Medium' :  WP['POG_FALL17_94X_v2_Medium']+[('conversionVeto', [True, True]), ('missingHits', [1, 1])],
+            'POG_FALL17_94X_v2_ConvVeto_Tight'  :  WP['POG_FALL17_94X_v2_Tight' ]+[('conversionVeto', [True, True]), ('missingHits', [1, 1])],
         }
 
         WP.update(WP_conversion_veto)
@@ -209,6 +219,8 @@ class Electron( Lepton ):
         ## ------- in   Fall17, not optimised simultaneously to the rest of ID. Cuts independent on WP
         for wps in ['Veto','Loose','Medium','Tight']:
             WP_conversion_veto_DxyDz['POG_FALL17_94X_v1_ConvVetoDxyDz_%s' % wps] =  WP['POG_FALL17_94X_v1_ConvVeto_%s' % wps ]+[('dxy',[0.05, 0.10]), ('dz',[0.10,0.20])]
+        for wps in ['Veto','Loose','Medium','Tight']:
+            WP_conversion_veto_DxyDz['POG_FALL17_94X_v2_ConvVetoDxyDz_%s' % wps] =  WP['POG_FALL17_94X_v2_ConvVeto_%s' % wps ]+[('dxy',[0.05, 0.10]), ('dz',[0.10,0.20])]
 
         WP.update(WP_conversion_veto_DxyDz)
 
