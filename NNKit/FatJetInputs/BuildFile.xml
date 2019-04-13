@@ -1,0 +1,9 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/ParameterSet"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="DataFormats/BTauReco"/>
+<use name="NNKit/CommonTools"/>
+<use name="NNKit/BTagHelpers"/>
+<export>
+  <lib   name="1"/>
+</export>
