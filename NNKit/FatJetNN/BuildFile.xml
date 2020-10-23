@@ -1,0 +1,10 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/Utilities"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="DataFormats/BTauReco"/>
+<use name="NNKit/CommonTools"/>
+<use name="NNKit/FatJetInputs"/>
+<export>
+  <lib   name="1"/>
+</export>

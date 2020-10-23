@@ -1,0 +1,10 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/MessageLogger"/>
+<use name="FWCore/Utilities"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="root"/>
+<use name="mxnet-predict"/>
+<export>
+  <lib   name="1"/>
+</export>
